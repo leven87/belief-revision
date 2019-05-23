@@ -4,21 +4,47 @@ import java.util.List;
 
 public class KnowledgeBase {
 
-    private List<String> sentences;
+    //private List<String> sentences;
+	private List<Sentence> sentences;
 
     public KnowledgeBase () {  }
 
-    public void initKnowledgeBase (String [] args) {
-        sentences = new ArrayList<>();
-        sentences.addAll(Arrays.asList(args));
+    
+    /*
+     * ¬ negation
+     * ∧ conjunction
+     * ∨  disjunction
+     * → implies
+     * ↔ biconditional
+     */
+    public void initKnowledgeBase () {
+    //public void initKnowledgeBase (Sentence [] args) {
+        sentences = new ArrayList<Sentence>();
+        
+        Sentence s1 = new Sentence("p",true);
+        Sentence s2 = new Sentence("q",true);
+        Sentence s3 = new Sentence("p→q",true);
+        
+        sentences.add(s1);
+        sentences.add(s2);
+        sentences.add(s3);
+        
+        System.out.println(sentences.get(2).getName());
+
+        //sentences.addAll(Arrays.asList(args));
+        
     }
+    
+    
 
     /**
      * Updating the current knowledge bases and provides each Validator with a new priority value
      *  - newest information gets highest priority.
      * @param input Validator to update the knowledge base with
      */
-    public void updateKnowledgeBase (String input) { }
+    public void updateKnowledgeBase (Sentence input) {
+    	
+    }
 
     public String printKnowledgeBase () {
         return null;
