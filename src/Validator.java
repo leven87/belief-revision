@@ -1,36 +1,72 @@
-public class Validator {
+import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
 
-    public Validator() {}
+public class Validator extends AbstractParseTreeVisitor<Boolean> implements GrammarVisitor <Boolean> {
 
-    public Validator(boolean p) {}
-
-    public Validator(char negation, boolean p) { }
-
-    public Validator(boolean p, char notation, boolean q) {}
-
-    //public Validator(Sentences p, char notation, Sentences q) {
-    // I change this because "∧" is a string datatype.
-    public Validator(Sentence p, String notation, Sentence q) {
-
+    @Override
+    public Boolean visitStart(GrammarParser.StartContext ctx) {
+        for (GrammarParser.SentenceContext s : ctx.s)
+            visit(s);
+        return visit(ctx.EOF());
     }
 
-    private boolean negation (boolean p) {
+    @Override
+    public Boolean visitAtomic(GrammarParser.AtomicContext ctx) {
+        return visit(ctx.atomicSentence());
+    }
+
+    @Override
+    public Boolean visitParenthesis(GrammarParser.ParenthesisContext ctx) {
+        return visit(ctx.sentence());
+    }
+
+    @Override
+    public Boolean visitBracket(GrammarParser.BracketContext ctx) {
+        return visit(ctx.sentence());
+    }
+
+    @Override
+    public Boolean visitNot(GrammarParser.NotContext ctx) {
+        return !visit(ctx.sentence());
+    }
+
+    @Override
+    public Boolean visitAnd(GrammarParser.AndContext ctx) {
+        return visit(ctx.s1) && visit(ctx.s2);
+    }
+
+    @Override
+    public Boolean visitOr(GrammarParser.OrContext ctx) {
+        return visit(ctx.s1) || visit(ctx.s2);
+    }
+
+    @Override
+    public Boolean visitImplies(GrammarParser.ImpliesContext ctx) {
+        if (visit(ctx.s1))
+            return visit(ctx.s2);
         return true;
     }
 
-    private boolean conjunction (boolean p, boolean q) {
-        return true;
+    @Override
+    public Boolean visitIfAndOnlyIf(GrammarParser.IfAndOnlyIfContext ctx) {
+        if (visit(ctx.s1))
+            return visit(ctx.s2);
+        else
+            return !visit(ctx.s2);
     }
 
-    private boolean disjunction (boolean p, boolean q) {
-        return true;
+    @Override
+    public Boolean visitPredicate(GrammarParser.PredicateContext ctx) {
+        return ctx.getText().equals("TRUE");
     }
 
-    private boolean implies (boolean p, boolean q) {
-        return true;
+    @Override
+    public Boolean visitTerms(GrammarParser.TermsContext ctx) {
+        HelperClass helper = new HelperClass();
+        for (Statement statement : helper.sentences) {
+            if (statement.getName().equals(ctx.x.getText()))
+                return statement.isState();
+        }
+        return false;
     }
 
-    private boolean biconditional (boolean p, boolean q) {
-        return true;
-    }
 }
