@@ -10,7 +10,7 @@ public class Validator {
 
     //public Validator(Sentences p, char notation, Sentences q) {
     // I change this because "∧" is a string datatype.
-    public Validator(Sentences p, String notation, Sentences q) {
+    public Validator(Sentence p, String notation, Sentence q) {
 
     }
 

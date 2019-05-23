@@ -29,7 +29,8 @@ public class KnowledgeBase {
         sentences.add(s2);
         sentences.add(s3);
         
-        System.out.println(sentences.get(2).getName());
+
+        //System.out.println(sentences.get(2).getName());
 
         //sentences.addAll(Arrays.asList(args));
         
@@ -45,9 +46,15 @@ public class KnowledgeBase {
     public void updateKnowledgeBase (Sentence input) {
     	Sentence s = sentences.get(0); 
     	Validator v = new Validator(s,"∧",input);
+        
     }
 
-    public String printKnowledgeBase () {
-        return null;
+    /*
+     * print knowledge base
+     */
+    public void printKnowledgeBase () {
+    	for (Sentence s : sentences) {
+    		System.out.println(s.getName());
+    	}
     }
 }
