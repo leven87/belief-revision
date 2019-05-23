@@ -8,12 +8,14 @@ public class KnowledgeBase {
 
     public KnowledgeBase () {  }
 
-    public void initKnowledgeBase(String [] args) {
+    public void initKnowledgeBase (String [] args) {
         sentences = new ArrayList<>();
         sentences.addAll(Arrays.asList(args));
     }
 
-    public String printKnowledgeBase() {
+    public void updateKnowledgeBase (String input) { }
+
+    public String printKnowledgeBase () {
         return null;
     }
 }
