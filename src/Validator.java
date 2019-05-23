@@ -6,11 +6,11 @@ public class Validator {
 
     public Validator(char negation, boolean p) { }
 
-    //public Validator(boolean p, char notation, boolean q) {}
-    // I change this because "∧" is a string datatype.
-    public Validator(boolean p, String notation, boolean q) {}
+    public Validator(boolean p, char notation, boolean q) {}
 
-    public Validator(Sentences p, char notation, Sentences q) {
+    //public Validator(Sentences p, char notation, Sentences q) {
+    // I change this because "∧" is a string datatype.
+    public Validator(Sentences p, String notation, Sentences q) {
 
     }
 
