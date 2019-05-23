@@ -14,9 +14,9 @@ public class KnowledgeBase {
     }
 
     /**
-     * Updating the current knowledge bases and provides each sentence with a new priority value
+     * Updating the current knowledge bases and provides each Validator with a new priority value
      *  - newest information gets highest priority.
-     * @param input sentence to update the knowledge base with
+     * @param input Validator to update the knowledge base with
      */
     public void updateKnowledgeBase (String input) { }
 

@@ -1,14 +1,14 @@
-public class sentence {
+public class Validator {
 
-    public sentence () {}
+    public Validator() {}
 
-    public sentence (boolean p) {}
+    public Validator(boolean p) {}
 
-    public sentence (char negation, boolean p) { }
+    public Validator(char negation, boolean p) { }
 
-    public sentence (boolean p, char notation, boolean q) {}
+    public Validator(boolean p, char notation, boolean q) {}
 
-    public sentence (sentence p, char notation, sentence q) {
+    public Validator(Sentences p, char notation, Sentences q) {
 
     }
 
