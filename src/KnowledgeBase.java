@@ -43,7 +43,8 @@ public class KnowledgeBase {
      * @param input Validator to update the knowledge base with
      */
     public void updateKnowledgeBase (Sentence input) {
-    	
+    	Sentence s = sentences.get(0); 
+    	Validator v = new Validator(s,"∧",input);
     }
 
     public String printKnowledgeBase () {
