@@ -13,6 +13,11 @@ public class KnowledgeBase {
         sentences.addAll(Arrays.asList(args));
     }
 
+    /**
+     * Updating the current knowledge bases and provides each sentence with a new priority value
+     *  - newest information gets highest priority.
+     * @param input sentence to update the knowledge base with
+     */
     public void updateKnowledgeBase (String input) { }
 
     public String printKnowledgeBase () {
