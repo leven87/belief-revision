@@ -29,12 +29,13 @@ public class KnowledgeBase {
         
         Sentence s1 = new Sentence("p",true);
         Sentence s2 = new Sentence("q",true);
-        Sentence s3 = new Sentence("p∨q∨s",true);
-        Sentence s4 = new Sentence("p∨s",true);
+        Sentence s3 = new Sentence("¬p∨¬q∨s",true);
+        Sentence s4 = new Sentence("p∨¬s",true);
         
         sentences.add(s1);
         sentences.add(s2);
         sentences.add(s3);
+        sentences.add(s4);
         
 
         //System.out.println(sentences.get(2).getName());
@@ -96,7 +97,7 @@ public class KnowledgeBase {
     			to_revise_sentences.remove((int)delete_sentence_num_list.get(i));
     		}
     		
-    		if(depends_sentences_length == 0) {
+    		if(depends_sentences_length <= 0) {
     			break;
     		}
     		
@@ -107,9 +108,10 @@ public class KnowledgeBase {
     			if(s.isState() == false) {
     				to_revise_sentences.get(i).setState(true);
     				true_sentences.add(to_revise_sentences.get(i));
+    				depends_sentences_length--;
     				break;
     			}
-    		}	
+    		}
     	}
 
     	System.out.println("here");
@@ -123,6 +125,7 @@ public class KnowledgeBase {
     
     
     private String[] validate (Sentence p, String notation, ArrayList<Sentence> q_arr) {
+    	
     	String[] result = new String[2];
         Map<String,Boolean> p_atoms_table = new HashMap<String,Boolean>(); 
         Map<String,Boolean> q_atoms_table = new HashMap<String,Boolean>();
@@ -194,8 +197,6 @@ public class KnowledgeBase {
 	            }
 	
 	        }        	
-        	
-        	
         }
 
    
