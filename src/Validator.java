@@ -62,9 +62,9 @@ public class Validator extends AbstractParseTreeVisitor<Boolean> implements Gram
     @Override
     public Boolean visitTerms(GrammarParser.TermsContext ctx) {
         HelperClass helper = new HelperClass();
-        for (Statement statement : helper.sentences) {
-            if (statement.getName().equals(ctx.x.getText()))
-                return statement.isState();
+        for (Sentence sentence : helper.sentences) {
+            if (sentence.getName().equals(ctx.x.getText()))
+                return sentence.isState();
         }
         return false;
     }
