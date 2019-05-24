@@ -1,6 +1,10 @@
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
+
 
 public class KnowledgeBase {
 
@@ -44,10 +48,35 @@ public class KnowledgeBase {
      * @param input Validator to update the knowledge base with
      */
     public void updateKnowledgeBase (Sentence input) {
+    	
+    	List<Sentence> to_revise_sentences = this.sentences;
+    	
+    	for (Sentence s : to_revise_sentences) {
+    		if(s.isState() == false) {
+    			continue;
+    		}
+    		
+    		Map<String, Sentence> map = this.validate (s,"∧",input);
+    		
+    		System.out.println(s.getName());
+    	}    	
+    	
+    	
     	Sentence s = sentences.get(0); 
-    	Validator v = new Validator(s,"∧",input);
-        
+    	Validator v = new Validator(s,"∧",input);  
     }
+    
+    
+    private Map<String, Sentence> validate (Sentence p, String notation, Sentence q) {
+        Map<String, Sentence> map = new HashMap<String, Sentence>();
+    	
+        
+        
+        map.put("2", p);
+
+        return map;
+    }
+
 
     /*
      * print knowledge base
