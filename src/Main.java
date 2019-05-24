@@ -14,6 +14,7 @@ public class Main {
 
 		// Initialize the Knowledge base. Print initial belief set.
 		kb.initKnowledgeBase();
+		System.out.println("The knowledge base before new facts have been added: ");
 		kb.printKnowledgeBase();
 
 		// Update the knowledge base and print new belief set.
@@ -21,7 +22,8 @@ public class Main {
 			Sentence input = new Sentence (line, true);
 			kb.updateKnowledgeBase(input);
 		}
-
+		System.out.println(" ");
+		System.out.println("The knowledge base after new facts have been added: ");
 		kb.printKnowledgeBase();
 
 	}
