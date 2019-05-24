@@ -14,7 +14,7 @@ public class Main {
 		kb.printKnowledgeBase();
 		
 		// Update the knowledge base and print new belief set.
-		while((Sentence line = in.readLine()) != null){
+		while((Sentence line = (in.readLine(), true)) != null){
 			KB.updateKnowledgeBase(line);
 		}
 
