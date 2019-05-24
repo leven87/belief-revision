@@ -1,9 +1,9 @@
-public class Sentences {
+public class Sentence {
 
     private String name;
     private boolean state;
 
-    public Sentences(String name, boolean state) {
+    public Sentence(String name, boolean state) {
         this.name = name;
         this.state = state;
     }

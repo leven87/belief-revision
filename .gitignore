@@ -1,3 +1,8 @@
 # Created by .ignore support plugin (hsz.mobi)
 .idea/
 believe-revision.iml
+/bin/
+.project
+.classpath
+.settings/org.eclipse.core.resources.prefs
+.settings/org.eclipse.ltk.core.refactoring.prefs
