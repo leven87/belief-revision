@@ -7,12 +7,12 @@ import java.util.List;
 
 public class HelperClass {
 
-    public List<Statement> sentences;
+    public List<Sentence> sentences;
 
     public void KnowledgeBaseHelper () {
-        sentences.add(new Statement("p", true));
-        sentences.add(new Statement("q", true));
-        sentences.add(new Statement("r", false));
+        sentences.add(new Sentence("p", true));
+        sentences.add(new Sentence("q", true));
+        sentences.add(new Sentence("r", false));
     }
 
     /**
