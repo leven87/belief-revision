@@ -1,5 +1,4 @@
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
@@ -19,7 +18,7 @@ public class Main {
 
 		// Update the knowledge base and print new belief set.
 		while((line = in.readLine()) != null) {
-			Sentence input = (line, true);
+			Sentence input = new Sentence (line, true);
 			kb.updateKnowledgeBase(input);
 		}
 
