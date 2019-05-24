@@ -3,6 +3,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.Map;
 
 import sun.tools.jar.resources.jar;
@@ -28,7 +30,7 @@ public class KnowledgeBase {
         sentences = new ArrayList<Sentence>();
         
         Sentence s1 = new Sentence("p",true);
-        Sentence s2 = new Sentence("q",true);
+        Sentence s2 = new Sentence("¬q",true);
         Sentence s3 = new Sentence("¬p∨¬q∨s",true);
         Sentence s4 = new Sentence("p∨¬s",true);
         
@@ -102,8 +104,8 @@ public class KnowledgeBase {
     		}
     		
     		//set the highest priority sentence which is false to be true
-    		//the highest index sentenece has the highest priority
-    		for(int i=to_revise_sentences.size()-1;i>0;i--) {
+    		//the lowest index sentenece has the highest priority
+    		for(int i=0;i<to_revise_sentences.size();i++) {
     			Sentence s  = to_revise_sentences.get(i);
     			if(s.isState() == false) {
     				to_revise_sentences.get(i).setState(true);
@@ -116,7 +118,10 @@ public class KnowledgeBase {
 
     	System.out.println("here");
     	
-    	to_revise_sentences.add(input);
+    	//to_revise_sentences.add(input);
+    	to_revise_sentences = this.removeDuplicate(to_revise_sentences,input);
+    	to_revise_sentences.add(0,input);
+    	
     	this.sentences = to_revise_sentences;
     	
     	//Sentence s = sentences.get(0); 
@@ -280,5 +285,17 @@ public class KnowledgeBase {
     	for (Sentence s : sentences) {
     		System.out.println(s.getName());
     	}
+    }
+    
+    
+    private static List<Sentence> removeDuplicate(List<Sentence> list, Sentence input) {
+    	   Iterator<Sentence> iterator = list.iterator();
+    	    while (iterator.hasNext()){
+    	    	Sentence next = iterator.next();
+    	    	if(next.getName().equals(input.getName())){
+    	    		iterator.remove();
+    	    	} 
+    	    }
+        return list;
     }
 }
