@@ -51,6 +51,15 @@ public class KnowledgeBase {
     /**
      * Updating the current knowledge bases and provides each Validator with a new priority value
      *  - newest information gets highest priority.
+     *  
+     * I assume just have ∨,¬, and sentences are in Horn clause. 
+     * Firstly,I check each sentences in KB with input, if consistent, label it true, 
+     * if not consistent,delete it, otherwise label it false(can't decided yet). 
+     * Then, I choose the highest priority(lowest index) labeled false sentence and label it true.
+     * Then, check all the labeled false sentences with input and this sentence , 
+     * then we also can turn some false(can't decided yet) sentence true or delete it. 
+     * We go on and on, finally, we just have true sentences. and these with input are new KB.
+     * 
      * @param input Validator to update the knowledge base with
      */
     public void updateKnowledgeBase (Sentence input) {
@@ -89,6 +98,7 @@ public class KnowledgeBase {
 	    		}
 	    		else if(validate_result[0] == "2") {// if depends, set the sentence state false, and update the sentence to simplified version
 	    			System.out.println(validate_result[1]);
+	    			//s.setName();
 	    		}    		
 	    		System.out.println(validate_result[0]);
 	    		
@@ -210,48 +220,6 @@ public class KnowledgeBase {
 		}          
         
         
-//        String q_name = q.getName();
-//        atoms = q_name.split("∨");
-//       
-//        
-//        for(int i=0; i< atoms.length;i++) {
-//        	
-//        	if(atoms[i].charAt(0)=='¬') {
-//        		q_atoms_table.put(atoms[i].substring(1), false); 
-//        		//atoms_table.add(atoms[i].substring(1));
-//        	}else {
-//        		q_atoms_table.put(atoms[i], true); 
-//        	}
-//        }        
-        
-//        Boolean p_bool_value = true;
-//        int inconsistent_count = 0;
-//        for (String q_atom : q_atoms_table.keySet()) {
-//        	Boolean q_atom_value = q_atoms_table.get(q_atom);
-//        	
-//        	ArrayList<String> delete_p_atoms_list = new ArrayList<String>(); 
-//        	for (String p_atom : p_atoms_table.keySet()) {
-//        		if(p_atom.equals(q_atom)) {
-//        			Boolean p_atom_value = p_atoms_table.get(p_atom);
-//        			if(p_atom_value != q_atom_value) {
-//        				if(q_atoms_table.size() == 1) {
-//        					delete_p_atoms_list.add(p_atom);
-//        					//p_atoms_table.remove(p_atom);
-//        					continue;
-//        				}
-//        				inconsistent_count ++;
-//        			}
-//        		}else {
-//        			continue;
-//        		}
-//        	}
-//        	
-//    		for(int i=0; i<delete_p_atoms_list.size();i++) {
-//    			p_atoms_table.remove(delete_p_atoms_list.get(i));
-//    		}        	
-//        } 
-        
-        
         if(p_atoms_table.size() == 0) {
         	result[0] = "0";//false
         }else if(inconsistent_count > 0) {
@@ -275,6 +243,19 @@ public class KnowledgeBase {
         }
 
         return result;
+    }
+    
+    
+    /*
+     * We assume KB have limited atomic formulas, i.e. only 5(p,q,r,s,t).
+     * then, we can build truth table for each sentence in KB and input. We just validate the sentence by following rules:
+     * 
+     * 1. the truth table of sentence is within that of input, return 1(true);
+     * 2. the truth table of sentence is out that of input, return 0 (false);
+     * 3. the truth table of sentence is partly with that of input, return 2(depends).
+     */
+    public void updateKnowledgeBaseWithTruthtable (Sentence input) {
+    	
     }
 
 
