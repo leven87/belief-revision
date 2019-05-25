@@ -1,4 +1,6 @@
 import java.lang.reflect.Array;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Sentence {
 
@@ -33,6 +35,32 @@ public class Sentence {
     
     public int[] getTruthtable() {
     	return this.truth_table;
+    }
+    
+    public void calTruthtable() {
+		this.truth_table = new int[AtomFormulaPos.getAtomFormulasNum()];
+		
+		for(int i=0;i<this.truth_table.length;i++) {
+			this.truth_table[i] = 9; //9 means it can be 0 or 1
+		}
+
+		Map<String,Boolean> atoms_table = new HashMap<String,Boolean>();
+
+		
+		String[] atoms = this.name.split("∨");                
+        for(int i=0; i< atoms.length;i++) {
+        	if(atoms[i].charAt(0)=='¬') {          		
+        		String atom = atoms[i].substring(1);
+        		Integer atom_pos = AtomFormulaPos.getAtomFormulaPos(atom);
+        		this.truth_table[atom_pos] = 0;
+        		atoms_table.put(atom, false);
+        	}else {
+        		String atom = atoms[i];
+        		Integer atom_pos = AtomFormulaPos.getAtomFormulaPos(atom);
+        		this.truth_table[atom_pos] = 1;            		
+        		atoms_table.put(atom, true); 
+        	}
+        }   	
     }
     
 }
