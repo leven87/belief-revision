@@ -13,7 +13,7 @@ import sun.tools.jar.resources.jar;
 public class KnowledgeBase {
 
     //private List<String> sentences;
-	private List<Sentence> sentences;
+	public List<Sentence> sentences;
 
     public KnowledgeBase () {  }
 
@@ -260,9 +260,10 @@ public class KnowledgeBase {
      public void updateKnowledgeBase(Sentence input) {
     	List<Sentence> to_revise_sentences = this.sentences;
     	
+    	input.calTruthtable();
+    	int[] input_truthtable = input.getTruthtable(); 
     	for (Sentence s : to_revise_sentences) {
     		s.setState(false); // firstly,set all sentences false, we don't believe everything in the knowledge base
-    		String s_name = s.getName();
     		s.calTruthtable();
     	}
     	
@@ -275,12 +276,11 @@ public class KnowledgeBase {
     		ArrayList delete_sentence_num_list = new ArrayList(); 
     		for(int i=0;i<to_revise_sentences.size(); i++) { 
     			Sentence s  = to_revise_sentences.get(i);
-	    	//for (Sentence s : to_revise_sentences) {
 	    		if(s.isState() == true) {
 	    			continue;
 	    		}
 	    		
-	    		String[] validate_result  = this.validate (s,"∧",true_sentences);
+	    		String[] validate_result  = this.validateWithTruthtable (s,true_sentences);
 	    		
 	    		
 	    		if(validate_result[0] == "0") {// if false, delete the sentence
@@ -331,7 +331,22 @@ public class KnowledgeBase {
     	this.sentences = to_revise_sentences;    	
     }
 
-
+     
+     /*
+      * validate with truth table method
+      * 
+      * @param p the sentence to validate
+      * @param q_arr a list of sentences which are assumed true
+      */
+     private String[] validateWithTruthtable (Sentence p, ArrayList<Sentence> q_arr) {
+    	 String[] result = new String[2];
+    	 
+    	 p.getTruthtable()
+    	 
+    	 return result;
+     }
+     
+     
     /*
      * print knowledge base
      */

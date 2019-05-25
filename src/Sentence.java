@@ -60,7 +60,10 @@ public class Sentence {
         		this.truth_table[atom_pos] = 1;            		
         		atoms_table.put(atom, true); 
         	}
-        }   	
+        }
+        
+        //calculate the range of its truthtable when sentence is true, assume the sentence is horn clause
+        
     }
     
 }
