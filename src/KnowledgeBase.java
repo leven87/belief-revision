@@ -62,7 +62,7 @@ public class KnowledgeBase {
      * 
      * @param input Validator to update the knowledge base with
      */
-    public void updateKnowledgeBase (Sentence input) {
+    public int updateKnowledgeBase2 (Sentence input) {
     	
     	List<Sentence> to_revise_sentences = this.sentences;
     	
@@ -133,7 +133,7 @@ public class KnowledgeBase {
     	to_revise_sentences.add(0,input);
     	
     	this.sentences = to_revise_sentences;
-    	
+    	return 1;
     	//Sentence s = sentences.get(0); 
     	//Validator v = new Validator(s,"∧",input);  
     }
@@ -246,6 +246,8 @@ public class KnowledgeBase {
     }
     
     
+    
+    
     /*
      * We assume KB have limited atomic formulas, i.e. only 5(p,q,r,s,t).
      * then, we can build truth table for each sentence in KB and input. We just validate the sentence by following rules:
@@ -254,8 +256,79 @@ public class KnowledgeBase {
      * 2. the truth table of sentence is out that of input, return 0 (false);
      * 3. the truth table of sentence is partly with that of input, return 2(depends).
      */
-    public void updateKnowledgeBaseWithTruthtable (Sentence input) {
+    //public void updateKnowledgeBaseWithTruthtable (Sentence input) {
+     public void updateKnowledgeBase(Sentence input) {
+    	List<Sentence> to_revise_sentences = this.sentences;
     	
+    	for (Sentence s : to_revise_sentences) {
+    		s.setState(false); // firstly,set all sentences false, we don't believe everything in the knowledge base
+    		String s_name = s.getName();
+    		s.calTruthtable();
+    	}
+    	
+    	int depends_sentences_length = to_revise_sentences.size();
+    	ArrayList<Sentence> true_sentences = new ArrayList<Sentence>(); 
+    	true_sentences.add(input);
+    	
+    	System.out.println("here");
+    	while(depends_sentences_length > 0) {
+    		ArrayList delete_sentence_num_list = new ArrayList(); 
+    		for(int i=0;i<to_revise_sentences.size(); i++) { 
+    			Sentence s  = to_revise_sentences.get(i);
+	    	//for (Sentence s : to_revise_sentences) {
+	    		if(s.isState() == true) {
+	    			continue;
+	    		}
+	    		
+	    		String[] validate_result  = this.validate (s,"∧",true_sentences);
+	    		
+	    		
+	    		if(validate_result[0] == "0") {// if false, delete the sentence
+	    			//to_revise_sentences.remove(s);
+	    			delete_sentence_num_list.add(i);
+	    			depends_sentences_length --;
+	    		}
+	    		else if(validate_result[0] == "1") {// if true, keep the sentence
+	    			s.setState(true);
+	    			depends_sentences_length --;
+	    		}
+	    		else if(validate_result[0] == "2") {// if depends, set the sentence state false, and update the sentence to simplified version
+	    			System.out.println(validate_result[1]);
+	    			//s.setName();
+	    		}    		
+	    		System.out.println(validate_result[0]);
+	    		
+	    		//System.out.println(s.getName());
+	    	} 
+    		
+    		for(int i=0; i<delete_sentence_num_list.size();i++) {
+    			to_revise_sentences.remove((int)delete_sentence_num_list.get(i));
+    		}
+    		
+    		if(depends_sentences_length <= 0) {
+    			break;
+    		}
+    		
+    		//set the highest priority sentence which is false to be true
+    		//the lowest index sentenece has the highest priority
+    		for(int i=0;i<to_revise_sentences.size();i++) {
+    			Sentence s  = to_revise_sentences.get(i);
+    			if(s.isState() == false) {
+    				to_revise_sentences.get(i).setState(true);
+    				true_sentences.add(to_revise_sentences.get(i));
+    				depends_sentences_length--;
+    				break;
+    			}
+    		}
+    	}
+
+    	System.out.println("here");
+    	
+    	//to_revise_sentences.add(input);
+    	to_revise_sentences = this.removeDuplicate(to_revise_sentences,input);
+    	to_revise_sentences.add(0,input);
+    	
+    	this.sentences = to_revise_sentences;    	
     }
 
 

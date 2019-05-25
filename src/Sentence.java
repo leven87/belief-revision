@@ -34,4 +34,5 @@ public class Sentence {
     public int[] getTruthtable() {
     	return this.truth_table;
     }
+    
 }
