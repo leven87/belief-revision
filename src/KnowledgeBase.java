@@ -13,7 +13,7 @@ import sun.tools.jar.resources.jar;
 public class KnowledgeBase {
 
     //private List<String> sentences;
-	public List<Sentence> sentences;
+	public static List<Sentence> sentences;
 
     public KnowledgeBase () {  }
 
