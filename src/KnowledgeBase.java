@@ -341,11 +341,84 @@ public class KnowledgeBase {
      private String[] validateWithTruthtable (Sentence p, ArrayList<Sentence> q_arr) {
     	 String[] result = new String[2];
     	 
-    	 p.getTruthtable()
     	 
+    	 Map<String, ArrayList<Integer>> p_range_truth_table = p.getRangeTruthtable();
+    	 
+//    	 System.out.println("ffffffff"); 
+//    	 for (String r : p_range_truth_table.keySet()) {
+//    		 ArrayList<Integer> rr = p_range_truth_table.get(r);
+//    		 System.out.println(rr);  
+//    	 }
+    	 //System.exit(1);
+    	 
+    	boolean consistent_whole = true; 
+    	for(int j=0;j<q_arr.size(); j++) {//validate range_truth_table of p  with the range_truth_table of q_arr, one by one(q)
+    		Sentence q = q_arr.get(j);
+    		Map<String, ArrayList<Integer>> q_range_truth_table = q.getRangeTruthtable();
+    		
+    		//boolean inconsistent = false;
+    		//boolean consistent = true;
+    		//
+    		
+    		//boolean delete = false;
+    		boolean consistent = true;
+    		Map<String, ArrayList<Integer>> p_range_truth_table_tmp = p_range_truth_table;
+    		for (ArrayList<Integer> p_range_truth_table_ele : p_range_truth_table.values()) {
+    			for (ArrayList<Integer> q_range_truth_table_ele : q_range_truth_table.values()) {
+    				int size = p_range_truth_table_ele.size();
+
+    				for(int i=0;i<size;i++) {
+    					if(p_range_truth_table_ele.get(i) == q_range_truth_table_ele.get(i)) {
+    						
+    					}else if(p_range_truth_table_ele.get(i) == 9) {
+    						q_range_truth_table_ele
+    						p_range_truth_table_ele.set(i,q_range_truth_table_ele.get(i));
+    					}else if(q_range_truth_table_ele.get(i) == 9) {
+    						
+    					}else {//p is 1, q is 0; or p is 0, q is 1
+    						consistent = false;
+    						//consistence occurs, search other range in p
+    						for (ArrayList<Integer> p_range_truth_table_ele2 : p_range_truth_table.values()) {
+    							int consistent_count = 0;
+    							for(int ii=0;ii<size;ii++) {
+    								if( !((p_range_truth_table_ele2.get(ii) == 1 && q_range_truth_table_ele.get(ii) == 0) ||
+    									(p_range_truth_table_ele2.get(ii) == 0 && q_range_truth_table_ele.get(ii) == 1))
+    									) {
+    									consistent_count++;
+    								}
+    							}
+    							if(consistent_count == size) {consistent = true; break;}
+    						}
+    						if(consistent == false) {
+    							result[0] = "0";//means need to delete this sentence
+    							return result;
+    						}
+    						
+    					}
+    				}
+    			}
+    			  //System.out.println("Value = " + value); 
+    		}
+            
+    	}
     	 return result;
      }
      
+     public boolean validateConsistent(ArrayList<Integer> p, ArrayList<Integer> q) {
+    	
+    	int size = p.size();
+			int consistent_count = 0;
+			for(int ii=0;ii<size;ii++) {
+				if( !((p.get(ii) == 1 && q.get(ii) == 0) ||
+					(p.get(ii) == 0 && q.get(ii) == 1))
+					) {
+					consistent_count++;
+				}
+			}
+		if(consistent_count == size) {return true;} 	 
+    	 
+    	 return false;
+     }
      
     /*
      * print knowledge base
