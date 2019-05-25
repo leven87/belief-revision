@@ -4,9 +4,7 @@ public class Validator extends AbstractParseTreeVisitor<Boolean> implements Gram
 
     @Override
     public Boolean visitStart(GrammarParser.StartContext ctx) {
-        for (GrammarParser.SentenceContext s : ctx.s)
-            visit(s);
-        return visit(ctx.EOF());
+        return visit(ctx.sentence);
     }
 
     @Override
@@ -61,8 +59,7 @@ public class Validator extends AbstractParseTreeVisitor<Boolean> implements Gram
 
     @Override
     public Boolean visitTerms(GrammarParser.TermsContext ctx) {
-        HelperClass helper = new HelperClass();
-        for (Sentence sentence : helper.sentences) {
+        for (Sentence sentence : KnowledgeBase.sentences) {
             if (sentence.getName().equals(ctx.x.getText()))
                 return sentence.isState();
         }
