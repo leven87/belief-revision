@@ -27,9 +27,10 @@ public class KnowledgeBase {
      * → implies
      * ↔ biconditional
      */
-    public void initKnowledgeBase (ArrayList<Sentence> args) {
+    //public void initKnowledgeBase (ArrayList<Sentence> args) {
+    public void initKnowledgeBase () {
     //public void initKnowledgeBase (Sentence [] args) {
-    	sentences = args;
+    	//sentences = args;
         sentences = new ArrayList<Sentence>();
         
         Sentence s1 = new Sentence("p",true);
@@ -61,6 +62,8 @@ public class KnowledgeBase {
      */
     //public void updateKnowledgeBaseWithTruthtable (Sentence input) {
      public void updateKnowledgeBase(Sentence input) {
+    	 
+    	 Validator validate = new Validator();
     	 //input = new Sentence ("¬p∨s", true);
     	 
     	List<Sentence> to_revise_sentences = this.sentences;
