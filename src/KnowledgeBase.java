@@ -27,25 +27,21 @@ public class KnowledgeBase {
      * → implies
      * ↔ biconditional
      */
-    public void initKnowledgeBase () {
+    public void initKnowledgeBase (ArrayList<Sentence> args) {
     //public void initKnowledgeBase (Sentence [] args) {
+    	sentences = args;
         sentences = new ArrayList<Sentence>();
         
         Sentence s1 = new Sentence("p",true);
         Sentence s2 = new Sentence("q",true);
         Sentence s3 = new Sentence("¬p∨¬q∨s",true);
         Sentence s4 = new Sentence("p∨¬s",true);
-//        Sentence s1 = new Sentence("p",true);
-//        Sentence s2 = new Sentence("¬s",true);
+        
         sentences.add(s1);
         sentences.add(s2);
         sentences.add(s3);
         sentences.add(s4);
         
-
-        //System.out.println(sentences.get(2).getName());
-
-        //sentences.addAll(Arrays.asList(args));
         
     }
     
