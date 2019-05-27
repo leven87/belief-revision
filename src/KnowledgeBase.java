@@ -7,6 +7,8 @@ import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.Map;
 
+import org.antlr.v4.parse.ANTLRParser.ruleReturns_return;
+
 import sun.tools.jar.resources.jar;
 
 
@@ -25,12 +27,14 @@ public class KnowledgeBase {
      * → implies
      * ↔ biconditional
      */
+    //public void initKnowledgeBase (ArrayList<Sentence> args) {
     public void initKnowledgeBase () {
     //public void initKnowledgeBase (Sentence [] args) {
+    	//sentences = args;
         sentences = new ArrayList<Sentence>();
         
         Sentence s1 = new Sentence("p",true);
-        Sentence s2 = new Sentence("¬q",true);
+        Sentence s2 = new Sentence("q",true);
         Sentence s3 = new Sentence("¬p∨¬q∨s",true);
         Sentence s4 = new Sentence("p∨¬s",true);
         
@@ -39,15 +43,160 @@ public class KnowledgeBase {
         sentences.add(s3);
         sentences.add(s4);
         
-
-        //System.out.println(sentences.get(2).getName());
-
-        //sentences.addAll(Arrays.asList(args));
         
+    }
+      
+    /*
+     * We assume KB have limited atomic formulas, i.e. only 5(p,q,r,s,t).
+     * then, we can build truth table for each sentence in KB and input. Also, we set all sentence state false at first. 
+     * We just validate the sentence with state false by following rules:
+     * 
+     * 1.the truth table of sentence is out that of input, return 0 (false);
+     * 2. others return 1.
+     *
+     * 0 means we delete the sentence from KB; then if there are still sentence in KB, we choose the highest priority one, 
+     * set it state true and join it in the input set, i.e, makes a conjunction between its truth table and the existing 
+     * input truth table. Then we repeat the validate process as before, until there is no sentence with false in KB. And 
+     * the true sentence in KB and the input would be the new KB.  
+     * 
+     */
+    //public void updateKnowledgeBaseWithTruthtable (Sentence input) {
+     public void updateKnowledgeBase(Sentence input) {
+    	 
+    	 Validator validate = new Validator();
+    	 //input = new Sentence ("¬p∨s", true);
+    	 
+    	List<Sentence> to_revise_sentences = this.sentences;
+    	
+    	input.calTruthtable();
+    	int[] input_truthtable = input.getTruthtable(); 
+    	for (Sentence s : to_revise_sentences) {
+    		s.setState(false); // firstly,set all sentences false, we don't believe everything in the knowledge base
+    		s.calTruthtable();
+    	}
+    	
+    	int depends_sentences_length = to_revise_sentences.size();
+//    	ArrayList<Sentence> true_sentences = new ArrayList<Sentence>(); 
+//    	true_sentences.add(input);
+    	Map<String, Boolean> true_sententces_truth_table = input.getCompleteTruthtable();
+    	
+    	System.out.println("here1");
+    	while(depends_sentences_length > 0) {
+    		ArrayList delete_sentence_num_list = new ArrayList(); 
+    		for(int i=0;i<to_revise_sentences.size(); i++) { 
+    			Sentence s  = to_revise_sentences.get(i);
+	    		if(s.isState() == true) {
+	    			continue;
+	    		}
+	    		
+
+	    		int validate_result  = (int)this.validateWithTruthtable (s.getCompleteTruthtable(),true_sententces_truth_table);
+	    		
+	    		
+	    		if(validate_result == 0) {// if false, delete the sentence
+	    			delete_sentence_num_list.add(i);
+	    			depends_sentences_length --;
+	    		}
+	    		else if(validate_result == 1) {// if true, keep the sentence
+	    			//s.setState(true);
+	    			//depends_sentences_length --;
+	    		}
+	    		//System.out.println(s.getName());
+	    	} 
+    		
+    		for(int i=0; i<delete_sentence_num_list.size();i++) {
+    			to_revise_sentences.remove((int)delete_sentence_num_list.get(i));
+    		}
+    		
+    		if(depends_sentences_length <= 0) {
+    			break;
+    		}
+    		
+    		//set the highest priority sentence which is false to be true
+    		//the lowest index sentenece has the highest priority
+    		for(int i=0;i<to_revise_sentences.size();i++) {
+
+    			Sentence s  = to_revise_sentences.get(i);
+    			if(s.isState() == false) {
+    				to_revise_sentences.get(i).setState(true);
+    				true_sententces_truth_table = TruthtableOperation.truthtableConjunction(true_sententces_truth_table, to_revise_sentences.get(i).getCompleteTruthtable());
+    				depends_sentences_length--;
+    				//System.exit(1);
+    				break;
+    			}
+    		}
+    	}
+
+    	System.out.println("here");
+    	
+    	to_revise_sentences = this.removeDuplicate(to_revise_sentences,input);
+    	to_revise_sentences.add(0,input);
+    	
+    	this.sentences = to_revise_sentences;    	
+    }
+
+     
+     /*
+      * validate with truth table method
+      * 
+      * @param table1 the table to validate
+      * @param table2  the always true table
+      */
+     private Integer validateWithTruthtable (Map<String, Boolean> table1, Map<String, Boolean> table2) {
+    	 
+    	
+    	// System.out.println(table1.toString());
+    	// System.out.println(table2.toString());
+    	int table1_true_num = (int)TruthtableOperation.getTruthtableTrueNum(table1); 
+    	int table2_true_num = (int)TruthtableOperation.getTruthtableTrueNum(table2); 
+    	int consistent_num = 0;
+    	int table1_only_true_num = 0;
+    	int table2_only_true_num = 0;
+    	
+ 		for (String s1 : table1.keySet()) {
+			Boolean v1 = table1.get(s1);
+			Boolean v2 = table2.get(s1);
+			if(v1 == true && v2 == true) {
+				consistent_num ++;
+			}else if(v1 == true && v2 == false) {
+				table1_only_true_num ++;
+			}else if(v1 == false && v2 == true) {
+				table2_only_true_num ++;
+			}
+		}
+ 		
+ 		
+ 		if(table1_true_num == table1_only_true_num && table2_true_num == table2_only_true_num) {
+ 			return 0;//no consistent, should delete
+ 		}
+ 		
+// 		if(consistent_num == table1_true_num) {
+// 			result = 1;//totally consistent, should label true, no need to validate again
+// 		} 		
+    	return 1; 
+     }
+     
+    /*
+     * print knowledge base
+     */
+    public void printKnowledgeBase () {
+    	for (Sentence s : sentences) {
+    		System.out.println(s.getName());
+    	}
     }
     
     
-
+    private static List<Sentence> removeDuplicate(List<Sentence> list, Sentence input) {
+    	   Iterator<Sentence> iterator = list.iterator();
+    	    while (iterator.hasNext()){
+    	    	Sentence next = iterator.next();
+    	    	if(next.getName().equals(input.getName())){
+    	    		iterator.remove();
+    	    	} 
+    	    }
+        return list;
+    }
+    
     /**
      * Updating the current knowledge bases and provides each Validator with a new priority value
      *  - newest information gets highest priority.
@@ -244,200 +393,5 @@ public class KnowledgeBase {
 
         return result;
     }
-    
-    
-    
-    
-    /*
-     * We assume KB have limited atomic formulas, i.e. only 5(p,q,r,s,t).
-     * then, we can build truth table for each sentence in KB and input. We just validate the sentence by following rules:
-     * 
-     * 1. the truth table of sentence is within that of input, return 1(true);
-     * 2. the truth table of sentence is out that of input, return 0 (false);
-     * 3. the truth table of sentence is partly with that of input, return 2(depends).
-     */
-    //public void updateKnowledgeBaseWithTruthtable (Sentence input) {
-     public void updateKnowledgeBase(Sentence input) {
-    	List<Sentence> to_revise_sentences = this.sentences;
-    	
-    	input.calTruthtable();
-    	int[] input_truthtable = input.getTruthtable(); 
-    	for (Sentence s : to_revise_sentences) {
-    		s.setState(false); // firstly,set all sentences false, we don't believe everything in the knowledge base
-    		s.calTruthtable();
-    	}
-    	
-    	int depends_sentences_length = to_revise_sentences.size();
-    	ArrayList<Sentence> true_sentences = new ArrayList<Sentence>(); 
-    	true_sentences.add(input);
-    	
-    	System.out.println("here");
-    	while(depends_sentences_length > 0) {
-    		ArrayList delete_sentence_num_list = new ArrayList(); 
-    		for(int i=0;i<to_revise_sentences.size(); i++) { 
-    			Sentence s  = to_revise_sentences.get(i);
-	    		if(s.isState() == true) {
-	    			continue;
-	    		}
-	    		
-	    		String[] validate_result  = this.validateWithTruthtable (s,true_sentences);
-	    		
-	    		
-	    		if(validate_result[0] == "0") {// if false, delete the sentence
-	    			//to_revise_sentences.remove(s);
-	    			delete_sentence_num_list.add(i);
-	    			depends_sentences_length --;
-	    		}
-	    		else if(validate_result[0] == "1") {// if true, keep the sentence
-	    			s.setState(true);
-	    			depends_sentences_length --;
-	    		}
-	    		else if(validate_result[0] == "2") {// if depends, set the sentence state false, and update the sentence to simplified version
-	    			System.out.println(validate_result[1]);
-	    			//s.setName();
-	    		}    		
-	    		System.out.println(validate_result[0]);
-	    		
-	    		//System.out.println(s.getName());
-	    	} 
-    		
-    		for(int i=0; i<delete_sentence_num_list.size();i++) {
-    			to_revise_sentences.remove((int)delete_sentence_num_list.get(i));
-    		}
-    		
-    		if(depends_sentences_length <= 0) {
-    			break;
-    		}
-    		
-    		//set the highest priority sentence which is false to be true
-    		//the lowest index sentenece has the highest priority
-    		for(int i=0;i<to_revise_sentences.size();i++) {
-    			Sentence s  = to_revise_sentences.get(i);
-    			if(s.isState() == false) {
-    				to_revise_sentences.get(i).setState(true);
-    				true_sentences.add(to_revise_sentences.get(i));
-    				depends_sentences_length--;
-    				break;
-    			}
-    		}
-    	}
-
-    	System.out.println("here");
-    	
-    	//to_revise_sentences.add(input);
-    	to_revise_sentences = this.removeDuplicate(to_revise_sentences,input);
-    	to_revise_sentences.add(0,input);
-    	
-    	this.sentences = to_revise_sentences;    	
-    }
-
-     
-     /*
-      * validate with truth table method
-      * 
-      * @param p the sentence to validate
-      * @param q_arr a list of sentences which are assumed true
-      */
-     private String[] validateWithTruthtable (Sentence p, ArrayList<Sentence> q_arr) {
-    	 String[] result = new String[2];
-    	 
-    	 
-    	 Map<String, ArrayList<Integer>> p_range_truth_table = p.getRangeTruthtable();
-    	 
-//    	 System.out.println("ffffffff"); 
-//    	 for (String r : p_range_truth_table.keySet()) {
-//    		 ArrayList<Integer> rr = p_range_truth_table.get(r);
-//    		 System.out.println(rr);  
-//    	 }
-    	 //System.exit(1);
-    	 
-    	boolean consistent_whole = true; 
-    	for(int j=0;j<q_arr.size(); j++) {//validate range_truth_table of p  with the range_truth_table of q_arr, one by one(q)
-    		Sentence q = q_arr.get(j);
-    		Map<String, ArrayList<Integer>> q_range_truth_table = q.getRangeTruthtable();
-    		
-    		//boolean inconsistent = false;
-    		//boolean consistent = true;
-    		//
-    		
-    		//boolean delete = false;
-    		boolean consistent = true;
-    		Map<String, ArrayList<Integer>> p_range_truth_table_tmp = p_range_truth_table;
-    		for (ArrayList<Integer> p_range_truth_table_ele : p_range_truth_table.values()) {
-    			for (ArrayList<Integer> q_range_truth_table_ele : q_range_truth_table.values()) {
-    				int size = p_range_truth_table_ele.size();
-
-    				for(int i=0;i<size;i++) {
-    					if(p_range_truth_table_ele.get(i) == q_range_truth_table_ele.get(i)) {
-    						
-    					}else if(p_range_truth_table_ele.get(i) == 9) {
-    						q_range_truth_table_ele
-    						p_range_truth_table_ele.set(i,q_range_truth_table_ele.get(i));
-    					}else if(q_range_truth_table_ele.get(i) == 9) {
-    						
-    					}else {//p is 1, q is 0; or p is 0, q is 1
-    						consistent = false;
-    						//consistence occurs, search other range in p
-    						for (ArrayList<Integer> p_range_truth_table_ele2 : p_range_truth_table.values()) {
-    							int consistent_count = 0;
-    							for(int ii=0;ii<size;ii++) {
-    								if( !((p_range_truth_table_ele2.get(ii) == 1 && q_range_truth_table_ele.get(ii) == 0) ||
-    									(p_range_truth_table_ele2.get(ii) == 0 && q_range_truth_table_ele.get(ii) == 1))
-    									) {
-    									consistent_count++;
-    								}
-    							}
-    							if(consistent_count == size) {consistent = true; break;}
-    						}
-    						if(consistent == false) {
-    							result[0] = "0";//means need to delete this sentence
-    							return result;
-    						}
-    						
-    					}
-    				}
-    			}
-    			  //System.out.println("Value = " + value); 
-    		}
-            
-    	}
-    	 return result;
-     }
-     
-     public boolean validateConsistent(ArrayList<Integer> p, ArrayList<Integer> q) {
-    	
-    	int size = p.size();
-			int consistent_count = 0;
-			for(int ii=0;ii<size;ii++) {
-				if( !((p.get(ii) == 1 && q.get(ii) == 0) ||
-					(p.get(ii) == 0 && q.get(ii) == 1))
-					) {
-					consistent_count++;
-				}
-			}
-		if(consistent_count == size) {return true;} 	 
-    	 
-    	 return false;
-     }
-     
-    /*
-     * print knowledge base
-     */
-    public void printKnowledgeBase () {
-    	for (Sentence s : sentences) {
-    		System.out.println(s.getName());
-    	}
-    }
-    
-    
-    private static List<Sentence> removeDuplicate(List<Sentence> list, Sentence input) {
-    	   Iterator<Sentence> iterator = list.iterator();
-    	    while (iterator.hasNext()){
-    	    	Sentence next = iterator.next();
-    	    	if(next.getName().equals(input.getName())){
-    	    		iterator.remove();
-    	    	} 
-    	    }
-        return list;
-    }
+        
 }
