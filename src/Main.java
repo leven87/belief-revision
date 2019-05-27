@@ -16,7 +16,6 @@ public class Main {
 
 		// Initialize the Knowledge base. Input and print initial belief set.
 		kb.initKnowledgeBase();
-
 		while((line = initial.readLine()) != null) {
 			pass = new Sentence (line, true);
 			kb.updateKnowledgeBase(pass);
