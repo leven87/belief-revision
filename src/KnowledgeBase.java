@@ -9,6 +9,10 @@ import java.util.Map;
 
 import org.antlr.v4.parse.ANTLRParser.ruleReturns_return;
 
+import org.antlr.v4.runtime.CharStream;
+import org.antlr.v4.runtime.CharStreams;
+import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.tree.ParseTree;
 import sun.tools.jar.resources.jar;
 
 
@@ -60,11 +64,25 @@ public class KnowledgeBase {
      * the true sentence in KB and the input would be the new KB.  
      * 
      */
-    //public void updateKnowledgeBaseWithTruthtable (Sentence input) {
+
+
+	/*
+	// Uncomment this section to use the validator
+	public void updateKnowledgeBase(Sentence input) {
+
+		Validator validate = new Validator();
+
+		CharStream sentence = CharStreams.fromString(input.getName());
+		GrammarLexer lex = new GrammarLexer(sentence);
+		CommonTokenStream tokens = new CommonTokenStream(lex);
+		GrammarParser parser = new GrammarParser(tokens);
+
+		ParseTree parseTree = parser.start();
+
+		Boolean result = validate.visit(parseTree);
+	}*/
+
      public void updateKnowledgeBase(Sentence input) {
-    	 
-    	 Validator validate = new Validator();
-    	 //input = new Sentence ("¬p∨s", true);
     	 
     	List<Sentence> to_revise_sentences = this.sentences;
     	
