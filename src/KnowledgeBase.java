@@ -70,6 +70,11 @@ public class KnowledgeBase {
 	// Uncomment this section to use the validator
 	public void updateKnowledgeBase(Sentence input) {
 
+		input.setName(input.getName().replace('¬', '!'));
+		input.setName(input.getName().replace('∧', '&'));
+		input.setName(input.getName().replace('∨', '|'));
+		input.setName(input.getName().replace('⇒', '>'));
+
 		Validator validate = new Validator();
 
 		CharStream sentence = CharStreams.fromString(input.getName());
