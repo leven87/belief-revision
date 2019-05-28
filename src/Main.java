@@ -26,11 +26,6 @@ public class Main {
 		System.out.println("The knowledge base before new facts have been added: ");
 		kb.printKnowledgeBase();
 
-		System.out.println("The knowledge base before new facts have been added: ");
-		kb.printKnowledgeBase();
-
-
-
 		// Update the knowledge base and print new belief set.
 		while((line = input.readLine()) != null) {
 			pass = new Sentence (line, true);
