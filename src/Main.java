@@ -27,7 +27,10 @@ public class Main {
 		kb.printKnowledgeBase();
 
 		// Update the knowledge base and print new belief set.
+		System.out.println(" ");
+		System.out.println("The new facts: ");
 		while((line = input.readLine()) != null) {
+			System.out.println(line);
 			pass = new Sentence (line, true);
 			kb.updateKnowledgeBase(pass);
 		}
