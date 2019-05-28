@@ -11,7 +11,7 @@ public class Main {
 		String line;
 		ArrayList<Sentence> lines = new ArrayList<>();
 		Sentence pass;
-		initial = new BufferedReader(new FileReader("input.txt"));
+		initial = new BufferedReader(new FileReader("initialKB.txt"));
 		input = new BufferedReader(new FileReader("input.txt"));
 
 
