@@ -1,6 +1,7 @@
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class Main {
 
@@ -8,6 +9,7 @@ public class Main {
 		KnowledgeBase kb = new KnowledgeBase();
 		BufferedReader input,initial;
 		String line;
+		ArrayList<Sentence> lines = new ArrayList<>();
 		Sentence pass;
 		initial = new BufferedReader(new FileReader("input.txt"));
 		input = new BufferedReader(new FileReader("input.txt"));
@@ -15,11 +17,14 @@ public class Main {
 
 
 		// Initialize the Knowledge base. Input and print initial belief set.
-		kb.initKnowledgeBase();
 		while((line = initial.readLine()) != null) {
 			pass = new Sentence (line, true);
-			kb.updateKnowledgeBase(pass);
+			lines.add(pass);
 		}
+
+		kb.initKnowledgeBase(lines);
+		System.out.println("The knowledge base before new facts have been added: ");
+		kb.printKnowledgeBase();
 
 		System.out.println("The knowledge base before new facts have been added: ");
 		kb.printKnowledgeBase();
