@@ -1,5 +1,7 @@
 # believe-revision
-It is an assignment for AI course.
+It is an assignment for AI course. If you want to run with truth table method, just run by default. If you want to run with Antlr to validate, please do the following steps.
+
+
 
 **Setup Antlr**
 
