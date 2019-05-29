@@ -9,6 +9,7 @@ import java.util.Map;
 
 import com.sun.org.apache.xerces.internal.impl.dv.dtd.NMTOKENDatatypeValidator;
 
+/* this class includes some function to operate truth table.*/
 public class TruthtableOperation {
 
 

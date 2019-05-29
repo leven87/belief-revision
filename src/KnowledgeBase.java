@@ -32,22 +32,7 @@ public class KnowledgeBase {
      * ↔ biconditional
      */
     public void initKnowledgeBase (ArrayList<Sentence> args) {
-    //public void initKnowledgeBase () {
-    //public void initKnowledgeBase (Sentence [] args) {
-    	  this.sentences = args;
-//        sentences = new ArrayList<Sentence>();
-//        
-//        Sentence s1 = new Sentence("p",true);
-//        Sentence s2 = new Sentence("q",true);
-//        Sentence s3 = new Sentence("¬p∨¬q∨s",true);
-//        Sentence s4 = new Sentence("p∨¬s",true);
-//        
-//        sentences.add(s1);
-//        sentences.add(s2);
-//        sentences.add(s3);
-//        sentences.add(s4);
-        
-        
+    	  this.sentences = args;  
     }
       
 
@@ -99,11 +84,8 @@ public class KnowledgeBase {
     	}
     	
     	int depends_sentences_length = to_revise_sentences.size();
-//    	ArrayList<Sentence> true_sentences = new ArrayList<Sentence>(); 
-//    	true_sentences.add(input);
     	Map<String, Boolean> true_sententces_truth_table = input.getCompleteTruthtable();
     	
-    	//System.out.println("here1");
     	while(depends_sentences_length > 0) {
     		ArrayList delete_sentence_num_list = new ArrayList(); 
     		for(int i=0;i<to_revise_sentences.size(); i++) { 
